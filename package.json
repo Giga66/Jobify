@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "express-async-errors": "^3.1.1",
+    "mongoose": "^6.6.1",
+    "react-router-dom": "^6.4.0",
+    "validator": "^13.7.0"
+  },
+  "name": "the-final-project",
+  "description": "#### Track Your Job Search",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

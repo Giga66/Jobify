@@ -1,8 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Wrapper from "../assets/wrappers/RegisterPage";
 import { Logo, FormRow, Alert } from "../components";
-import { useAppContext } from "../context/appContext";
+import { useAppContext, registerUser } from "../context/appContext";
 
 const initialState = {
     name: '',
@@ -13,9 +14,9 @@ const initialState = {
 }
 
 const Register = () => {
+    const navigate = useNavigate()
     const [values, setValues] = useState(initialState)
-
-    const { isLoading, showAlert, displayAlert } = useAppContext()
+    const { user, isLoading, showAlert, displayAlert, registerUser } = useAppContext()
 
     const toggleMember = () => {
         setValues({ ...values, isMember: !values.isMember })
@@ -27,13 +28,26 @@ const Register = () => {
 
     const onSubmit = (e) => {
         e.preventDefault()
-        const {name, email, password, isMember} = values
-        if(!email || !password || (!isMember && !name)){
+        const { name, email, password, isMember } = values
+        if (!email || !password || (!isMember && !name)) {
             displayAlert()
             return
         }
-        console.log(values)
-    }   
+        const currentUser = { name, email, password }
+        if (isMember) {
+            console.log('already a member');
+        } else {
+            registerUser(currentUser)
+        }
+    }
+
+    useEffect(() => {
+        if (user) {
+            setTimeout(() => {
+                navigate('/')
+            }, 3000)
+        }
+    }, [user, navigate])
 
     return (
         <Wrapper className="full-page">
@@ -47,7 +61,7 @@ const Register = () => {
                 }
                 <FormRow type='email' name='email' value={values.email} handleChange={handleChange} />
                 <FormRow type='password' name='password' value={values.password} handleChange={handleChange} />
-                <button type="submit" className="btn btn-block">Submit</button>
+                <button type="submit" className="btn btn-block" disabled={isLoading}>Submit</button>
                 <p>
                     {values.isMember ? 'Not a member yet?' : 'Already a member?'}
                     <button type='button' onClick={toggleMember} className='member-btn '>

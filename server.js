@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import connectDB from './db/connect.js'
 import 'express-async-errors'
+import morgan from 'morgan'
 
 
 const app = express()
@@ -17,11 +18,15 @@ import jobsRouter from './routes/jobsRoutes.js'
 import notFoundMiddleWare from './middleware/not-found.js'
 import errorHandlerMiddleware from './middleware/error-handler.js'
 
+if(process.env.NODE_ENV !== 'production'){
+    app.use(morgan('dev'))
+}
+
 app.use(express.json())
 
 
-app.get('/', (req, res) => {
-    res.send('Welcome!')
+app.get('/api/v1', (req, res) => {
+    res.json({ msg: 'Welcome!' })
 })
 
 app.use('/api/v1/auth', authRouter)

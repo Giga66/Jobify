@@ -1,4 +1,5 @@
-import { CLEAR_ALERT, DISPLAY_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_SUCCESS, REGISTER_USER_ERROR, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR } from "./actions"
+import { CLEAR_ALERT, DISPLAY_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER } from "./actions"
+import { initialState } from "./appContext"
 
 const reducer = (state, action) => {
     if (action.type === DISPLAY_ALERT) {
@@ -58,6 +59,21 @@ const reducer = (state, action) => {
             showAlert: true,
             alertType: 'danger',
             alertText: action.payload.msg,
+        }
+    }
+    if (action.type === TOGGLE_SIDEBAR) {
+        return {
+            ...state,
+            showSidebar: !state.showSidebar
+        }
+    }
+    if (action.type === LOGOUT_USER) {
+        return {
+            ...initialState,
+            user: null,
+            token: null,
+            userLocation: '',
+            jobLocation: '',
         }
     }
 

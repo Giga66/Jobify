@@ -95,14 +95,26 @@ const AppProvider = ({ children }) => {
         dispatch({ type: TOGGLE_SIDEBAR })
     }
 
-    const logoutUser = () =>{
-        dispatch({type: LOGOUT_USER})
+    const logoutUser = () => {
+        dispatch({ type: LOGOUT_USER })
         removeUserFromLocalStorage()
     }
 
+    const updateUser = async (currentUser) => {
+        try {
+            const { data } = await axios.patch('/api/v1/auth/updateUser', currentUser, {
+                headers: {
+                    Authorization: `Bearer ${state.token}`
+                },
+            })
+            console.log(data)
+        } catch (error) {
+            console.log(error.response)
+        }
+    }
 
     return (
-        <AppContext.Provider value={{ ...state, displayAlert, loginUser, setupUser, toggleSidebar, logoutUser }}>
+        <AppContext.Provider value={{ ...state, displayAlert, loginUser, setupUser, toggleSidebar, logoutUser, updateUser }}>
             {children}
         </AppContext.Provider>
     )

@@ -28,6 +28,27 @@ const AppContext = React.createContext()
 const AppProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState)
 
+    const authFecth = axios.create({
+        baseURL: '/api/v1',
+    })
+
+    authFecth.interceptors.request.use((config) => {
+        config.headers.common['Authorization'] = `Bearer ${state.token}`
+        return config
+    }, (error) => {
+        return Promise.reject(error)
+    })
+
+    authFecth.interceptors.response.use((response) => {
+        return response
+    }, (error) => {
+        console.log(error.response)
+        if (error.response.status === 401) {
+            console.log('AUTH ERROR');
+        }
+        return Promise.reject(error)
+    })
+
 
     const displayAlert = () => {
         dispatch({ type: DISPLAY_ALERT })
@@ -102,12 +123,7 @@ const AppProvider = ({ children }) => {
 
     const updateUser = async (currentUser) => {
         try {
-            const { data } = await axios.patch('/api/v1/auth/updateUser', currentUser, {
-                headers: {
-                    Authorization: `Bearer ${state.token}`
-                },
-            })
-            console.log(data)
+            const { data } = await authFecth.patch('/auth/updateUser', currentUser)
         } catch (error) {
             console.log(error.response)
         }

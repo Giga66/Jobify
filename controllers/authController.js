@@ -19,7 +19,7 @@ const register = async (req, res) => {
     const user = await User.create({ name, email, password })
 
     const token = user.createJWT()
-    res.status(StatusCodes.OK).json({ user: { email: user.email, lastname: user.lastName, location: user.location, name: user.name }, token, location: user.location })
+    res.status(StatusCodes.CREATED).json({ user: { email: user.email, lastname: user.lastName, location: user.location, name: user.name }, token, location: user.location })
 }
 
 const login = async (req, res) => {
@@ -43,16 +43,16 @@ const login = async (req, res) => {
 
 
 const updateUser = async (req, res) => {
-    const {name, email, lastname, location} = req.body
-    if(!email || !name || !lastname || !location) {
+    const { name, email, lastName, location } = req.body
+    if (!email || !name || !lastName || !location) {
         throw new BadRequestError('Please provide all values')
     }
 
-    const user = await User.findOne({_id: req.body.userId})
+    const user = await User.findOne({ _id: req.user.userId })
 
     user.email = email
     user.name = name
-    user.lastName = lastname
+    user.lastName = lastName
     user.location = location
 
     await user.save()

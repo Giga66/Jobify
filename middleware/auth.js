@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import { UnauthenticatedError } from '../errors/index.js'
 
 const auth = async (req, res, next) => {
-    const authHeader = req.headers.authorization
+    const authHeader =  req.headers.authorization
     if (!authHeader || !authHeader.startsWith('Bearer')) {
         throw new UnauthenticatedError('Authentication invalid')
     }
@@ -14,7 +14,7 @@ const auth = async (req, res, next) => {
         req.user = { userId: payload.userId }
         next()
     } catch (error) {
-        throw new UnauthenticatedError('Authentication invalid')
+        throw new UnauthenticatedError('Authentication Invalid')
     }
 }
 

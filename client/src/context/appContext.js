@@ -79,14 +79,14 @@ const AppProvider = ({ children }) => {
 
             dispatch({
                 type: LOGIN_USER_SUCCESS,
-                payload: { user, token, location }
+                payload: { user, token, location },
             })
 
             addUserToLocalStorage({ user, token, location })
         } catch (error) {
             dispatch({
                 type: LOGIN_USER_ERROR,
-                payload: ({ msg: error.response.data.msg })
+                payload: { msg: error.response.data.msg },
             })
         }
         clearAlert()
@@ -131,8 +131,14 @@ const AppProvider = ({ children }) => {
             dispatch({ type: UPDATE_USER_SUCCESS, payload: user, location, token })
             addUserToLocalStorage({ user, location, token })
         } catch (error) {
-            dispatch({ type: UPDATE_USER_ERROR, payload: { msg: error.response.data.msg } })
+            if (error.response.status !== 401) {
+                dispatch({
+                    type: UPDATE_USER_ERROR,
+                    payload: { msg: error.response.data.msg },
+                })
+            }
         }
+        clearAlert()
     }
 
 

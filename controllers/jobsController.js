@@ -1,6 +1,21 @@
+import Jobs from '../models/Jobs.js'
+import { StatusCodes } from 'http-status-codes'
+import { BadRequestError, NotFoundError } from '../errors/index.js'
+
 const createJob = async (req, res) => {
-    res.send('create job')
+    const { position, company } = req.body
+
+    if (!position || !company) {
+        throw new BadRequestError('Please Provide All Values')
+    }
+
+    req.body.createdBy = req.user.userId
+
+    const job = await Jobs.create(req.body)
+    res.status(StatusCodes.CREATED).json({ job })
 }
+
+
 const deleteJob = async (req, res) => {
     res.send('delete job')
 }

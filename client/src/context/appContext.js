@@ -3,7 +3,7 @@ import { useReducer, useContext } from "react"
 import axios from 'axios'
 
 import reducer from "./reducer"
-import { DISPLAY_ALERT, CLEAR_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR } from "./actions"
+import { DISPLAY_ALERT, CLEAR_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, HANDLE_CHANGE, CLEAR_VALUES } from "./actions"
 
 
 const token = localStorage.getItem('token')
@@ -17,10 +17,19 @@ const initialState = {
     alertText: '',
     alertType: '',
     user: user ? JSON.parse(user) : null,
-    toekn: token,
+    token: token,
     userLocation: userLocation || '',
+    showSidebar: false,
+
+    isEditing: false,
+    editJobId: '',
+    position: '',
+    company: '',
     jobLocation: userLocation || '',
-    showSidebar: false
+    jobTypeOptions: ['full-time', 'part-time', 'remote', 'internship'],
+    jobType: 'full-time',
+    statusOptions: ['pending', 'interview', 'declined'],
+    status: 'pending',
 }
 
 const AppContext = React.createContext()
@@ -128,7 +137,7 @@ const AppProvider = ({ children }) => {
 
             const { user, location, token } = data
 
-            dispatch({ type: UPDATE_USER_SUCCESS, payload: user, location, token })
+            dispatch({ type: UPDATE_USER_SUCCESS, payload: { user, location, token } })
             addUserToLocalStorage({ user, location, token })
         } catch (error) {
             if (error.response.status !== 401) {
@@ -141,10 +150,21 @@ const AppProvider = ({ children }) => {
         clearAlert()
     }
 
+    const handleChange = ({ name, value }) => {
+        dispatch({
+          type: HANDLE_CHANGE,
+          payload: { name, value },
+        })
+      }
+
+      const clearValues = () => {
+        dispatch({ type: CLEAR_VALUES })
+      }
+
 
 
     return (
-        <AppContext.Provider value={{ ...state, displayAlert, loginUser, setupUser, toggleSidebar, logoutUser, updateUser }}>
+        <AppContext.Provider value={{ ...state, displayAlert, loginUser, setupUser, toggleSidebar, logoutUser, updateUser, handleChange, clearValues }}>
             {children}
         </AppContext.Provider>
     )

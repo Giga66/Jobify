@@ -1,4 +1,4 @@
-import { CLEAR_ALERT, DISPLAY_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR } from "./actions"
+import { CLEAR_ALERT, DISPLAY_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, HANDLE_CHANGE, CLEAR_VALUES } from "./actions"
 import { initialState } from "./appContext"
 
 const reducer = (state, action) => {
@@ -101,6 +101,21 @@ const reducer = (state, action) => {
             alertText: action.payload.msg,
         }
     }
+    if (action.type === HANDLE_CHANGE) {
+        return { ...state, [action.payload.name]: action.payload.value }
+    }
+    if (action.type === CLEAR_VALUES) {
+        const initialState = {
+          isEditing: false,
+          editJobId: '',
+          position: '',
+          company: '',
+          jobLocation: state.userLocation,
+          jobType: 'full-time',
+          status: 'pending',
+        }
+        return { ...state, ...initialState }
+      }
 
     throw new Error(`no serach action : ${action.type}`)
 }

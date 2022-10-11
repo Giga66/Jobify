@@ -1,4 +1,4 @@
-import { CLEAR_ALERT, DISPLAY_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, HANDLE_CHANGE, CLEAR_VALUES } from "./actions"
+import { CLEAR_ALERT, DISPLAY_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR } from "./actions"
 import { initialState } from "./appContext"
 
 const reducer = (state, action) => {
@@ -106,16 +106,38 @@ const reducer = (state, action) => {
     }
     if (action.type === CLEAR_VALUES) {
         const initialState = {
-          isEditing: false,
-          editJobId: '',
-          position: '',
-          company: '',
-          jobLocation: state.userLocation,
-          jobType: 'full-time',
-          status: 'pending',
+            isEditing: false,
+            editJobId: '',
+            position: '',
+            company: '',
+            jobLocation: state.userLocation,
+            jobType: 'full-time',
+            status: 'pending',
         }
         return { ...state, ...initialState }
-      }
+    }
+
+    if (action.type === CREATE_JOB_BEGIN) {
+        return { ...state, isLoading: true }
+    }
+    if (action.type === CREATE_JOB_SUCCESS) {
+        return {
+            ...state,
+            isLoading: false,
+            showAlert: true,
+            alertType: 'success',
+            alertText: 'New Job Created!',
+        }
+    }
+    if (action.type === CREATE_JOB_ERROR) {
+        return {
+            ...state,
+            isLoading: false,
+            showAlert: true,
+            alertType: 'danger',
+            alertText: action.payload.msg,
+        }
+    }
 
     throw new Error(`no serach action : ${action.type}`)
 }

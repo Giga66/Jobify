@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FormRowSelect = ({ labelText, name, value, handleChange, list}) => {
+const FormRowSelect = ({ labelText, name, value, handleChange, list }) => {
     return (
         <div className='form-row'>
             <label htmlFor={name} className='form-label'>
@@ -24,5 +24,6 @@ const FormRowSelect = ({ labelText, name, value, handleChange, list}) => {
         </div>
     )
 }
+
 
 export default FormRowSelect

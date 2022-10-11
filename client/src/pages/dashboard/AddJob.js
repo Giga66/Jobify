@@ -13,46 +13,61 @@ const AddJob = () => {
         jobType,
         jobTypeOptions,
         status,
+        handleChange,
         statusOptions,
-        clearValues
+        clearValues,
+        createJob
     } = useAppContext()
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        // while testing
 
-        if (!position || !company || !jobLocation) {
-            displayAlert()
+        // if (!position || !company || !jobLocation) {
+        //   displayAlert()
+        //   return
+        // }
+        if (isEditing) {
+            // eventually editJob()
             return
         }
-        console.log('create job')
+        createJob()
     }
 
     const handleJobInput = (e) => {
-        const name = e.target.name
-        const value = e.target.value
-        console.log(`${name}:${value}`)
+        handleChange({ name: e.target.name, value: e.target.value })
     }
 
     return (
         <Wrapper>
             <form className='form'>
-                <h3>{isEditing ? 'edit job' : 'add job'}</h3>
+                <h3>{isEditing ? 'edit job' : 'add job'} </h3>
                 {showAlert && <Alert />}
 
+                {/* position */}
                 <div className='form-center'>
-                    <FormRow type='text' name='position' value={position} handleChange={handleJobInput} />
-
-                    <FormRow type='text' labelText='company' name='jobLocation' value={jobLocation} handleChange={handleJobInput}
-                    />
-
-                    <FormRow type='text' labelText='location' name='jobLocation' vlaue={jobLocation} handleChange={handleJobInput} />
-
-                    <FormRowSelect
-                        name='status'
-                        value={status}
+                    <FormRow
+                        type='text'
+                        name='position'
+                        value={position}
                         handleChange={handleJobInput}
-                        list={statusOptions}
                     />
+                    {/* company */}
+                    <FormRow
+                        type='text'
+                        name='company'
+                        value={company}
+                        handleChange={handleJobInput}
+                    />
+                    {/* location */}
+                    <FormRow
+                        type='text'
+                        labelText='location'
+                        name='jobLocation'
+                        value={jobLocation}
+                        handleChange={handleJobInput}
+                    />
+                    {/* job type */}
 
                     <FormRowSelect
                         labelText='type'
@@ -61,20 +76,36 @@ const AddJob = () => {
                         handleChange={handleJobInput}
                         list={jobTypeOptions}
                     />
-                </div>
-                <div className='btn-container'>
-                    <button className='btn btn-block submit-btn' type='submit' onClick={handleSubmit}>submit</button>
-                </div>
-                <div className='btn-container'>
-                    <button
-                        className='btn btn-block clear-btn'
-                        onClick={(e) => {
-                            e.preventDefault()
-                            clearValues()
-                        }}
-                    >
-                        clear
-                    </button>
+
+                    {/* job status */}
+                    <FormRowSelect
+                        name='status'
+                        value={status}
+                        handleChange={handleJobInput}
+                        list={statusOptions}
+                    />
+                    <div className='btn-container'>
+                        <button
+                            className='btn btn-block submit-btn'
+                            type='submit'
+                            onClick={handleSubmit}
+                        >
+                            submit
+                        </button>
+                    </div>
+                    <div className='btn-container'>
+                        {/* submit button */}
+
+                        <button
+                            className='btn btn-block clear-btn'
+                            onClick={(e) => {
+                                e.preventDefault()
+                                clearValues()
+                            }}
+                        >
+                            clear
+                        </button>
+                    </div>
                 </div>
             </form>
         </Wrapper>

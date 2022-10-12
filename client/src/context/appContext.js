@@ -1,9 +1,8 @@
-import React from "react"
-import { useReducer, useContext } from "react"
+import React, { useReducer, useContext } from "react"
 import axios from 'axios'
 
 import reducer from "./reducer"
-import { DISPLAY_ALERT, CLEAR_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR } from "./actions"
+import { DISPLAY_ALERT, CLEAR_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, GET_JOBS_BEGIN, GET_JOBS_SUCCESS } from "./actions"
 
 
 const token = localStorage.getItem('token')
@@ -30,6 +29,10 @@ const initialState = {
     jobType: 'full-time',
     statusOptions: ['pending', 'interview', 'declined'],
     status: 'pending',
+    jobs: [],
+    totalJobs: 0,
+    numOfPages: 1,
+    page: 1,
 }
 
 const AppContext = React.createContext()
@@ -39,6 +42,9 @@ const AppProvider = ({ children }) => {
 
     const authFecth = axios.create({
         baseURL: '/api/v1',
+        headers: {
+            Authorization: `Bearer ${state.token}`,
+        },
     })
 
     authFecth.interceptors.request.use((config) => {
@@ -173,6 +179,7 @@ const AppProvider = ({ children }) => {
                 jobType,
                 status,
             })
+            dispatch({ type: CREATE_JOB_SUCCESS })
             dispatch({ type: CLEAR_VALUES })
         } catch (error) {
             if (error.response.status === 401) return
@@ -184,10 +191,29 @@ const AppProvider = ({ children }) => {
         clearAlert()
     }
 
+    const getJobs = async () => {
+        let url = `/jobs`
+
+        dispatch({ type: GET_JOBS_BEGIN })
+        try {
+            const { data } = await authFecth(url)
+            const { jobs, totalJobs, numOfPages } = data
+            dispatch({
+                type: GET_JOBS_SUCCESS,
+                payload: {
+                    jobs, totalJobs, numOfPages
+                }
+            })
+        } catch (error) {
+            console.log(error)
+            logoutUser()
+        }
+        clearAlert()
+    }
 
 
     return (
-        <AppContext.Provider value={{ ...state, displayAlert, loginUser, setupUser, toggleSidebar, logoutUser, updateUser, handleChange, clearValues, createJob }}>
+        <AppContext.Provider value={{ ...state, displayAlert, loginUser, setupUser, toggleSidebar, logoutUser, updateUser, handleChange, clearValues, createJob, getJobs }}>
             {children}
         </AppContext.Provider>
     )

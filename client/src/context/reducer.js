@@ -1,4 +1,4 @@
-import { CLEAR_ALERT, DISPLAY_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR } from "./actions"
+import { CLEAR_ALERT, DISPLAY_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, GET_JOBS_BEGIN, GET_JOBS_SUCCESS } from "./actions"
 import { initialState } from "./appContext"
 
 const reducer = (state, action) => {
@@ -136,6 +136,18 @@ const reducer = (state, action) => {
             showAlert: true,
             alertType: 'danger',
             alertText: action.payload.msg,
+        }
+    }
+    if (action.type === GET_JOBS_BEGIN) {
+        return { ...state, isLoading: true, showAlert: false }
+    }
+    if (action.type === GET_JOBS_SUCCESS) {
+        return {
+            ...state,
+            isLoading: false,
+            jobs: action.payload.jobs,
+            totalJobs: action.payload.totalJobs,
+            numOfPages: action.payload.numOfPages,
         }
     }
 

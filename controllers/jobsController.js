@@ -1,6 +1,7 @@
 import Job from '../models/Jobs.js'
 import { StatusCodes } from 'http-status-codes'
 import { BadRequestError, NotFoundError } from '../errors/index.js'
+// import { checkPermissions } from '../client/src/utils.js'
 
 const createJob = async (req, res) => {
     const { position, company } = req.body
@@ -25,7 +26,7 @@ const deleteJob = async (req, res) => {
         throw new CustomError.NotFoundError(`No job with id : ${jobId}`)
     }
 
-    checkPermissions(req.user, job.createdBy)
+    // checkPermissions(req.user, job.createdBy)
 
     await job.remove()
     res.status(StatusCodes.OK).json({ msg: 'Success! Job removed' })

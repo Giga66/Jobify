@@ -14,12 +14,12 @@ const JobSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['invterview', 'declined', 'pending'],
+        enum: ['interview', 'declined', 'pending'],
         default: 'pending'
     },
     jobType: {
         type: String,
-        enum: ['full-time', 'part-time', 'remote', 'internship'],
+        enum: ['full-time', 'part-time', 'remote', 'enternship'],
         default: 'full-time',
     },
     jobLocation: {

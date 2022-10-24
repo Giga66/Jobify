@@ -2,7 +2,7 @@ import React, { useReducer, useContext } from "react"
 import axios from 'axios'
 
 import reducer from "./reducer"
-import { DISPLAY_ALERT, CLEAR_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, GET_JOBS_BEGIN, GET_JOBS_SUCCESS, EDIT_JOB_BEGIN, EDIT_JOB_SUCCESS, EDIT_JOB_ERROR, DELETE_JOB_BEGIN, SHOW_STATS_BEGIN, SHOW_STATS_SUCCESS, CLEAR_FILTERS } from "./actions"
+import { DISPLAY_ALERT, CLEAR_ALERT, LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, GET_JOBS_BEGIN, GET_JOBS_SUCCESS, EDIT_JOB_BEGIN, EDIT_JOB_SUCCESS, EDIT_JOB_ERROR, DELETE_JOB_BEGIN, SHOW_STATS_BEGIN, SHOW_STATS_SUCCESS, CLEAR_FILTERS, CHANGE_PAGE } from "./actions"
 
 
 const token = localStorage.getItem('token')
@@ -209,7 +209,7 @@ const AppProvider = ({ children }) => {
         }
         dispatch({ type: GET_JOBS_BEGIN })
         try {
-            const { data } = await authFetch(url)
+            const { data } = await authFecth(url)
             const { jobs, totalJobs, numOfPages } = data
             dispatch({
                 type: GET_JOBS_SUCCESS,
@@ -285,9 +285,13 @@ const AppProvider = ({ children }) => {
         dispatch({ type: CLEAR_FILTERS })
     }
 
+    const changePage = (page) => {
+        dispatch({ type: CHANGE_PAGE, payload: { page } })
+      }
+
 
     return (
-        <AppContext.Provider value={{ ...state, displayAlert, loginUser, setupUser, toggleSidebar, logoutUser, updateUser, handleChange, clearValues, createJob, getJobs, deleteJob, editJob, showStats, clearFilters }}>
+        <AppContext.Provider value={{ ...state, displayAlert, loginUser, setupUser, toggleSidebar, logoutUser, updateUser, handleChange, clearValues, createJob, getJobs, deleteJob, editJob, showStats, clearFilters, changePage }}>
             {children}
         </AppContext.Provider>
     )

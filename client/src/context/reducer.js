@@ -214,6 +214,9 @@ const reducer = (state, action) => {
     if (action.type === CHANGE_PAGE) {
         return { ...state, page: action.payload.page }
     }
+    if (action.type === HANDLE_CHANGE) {
+        return { ...state, page: 1, [action.payload.name]: action.payload.value }
+    }
 
     throw new Error(`no serach action : ${action.type}`)
 }

@@ -4,13 +4,20 @@
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "express-async-errors": "^3.1.1",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^6.6.0",
+    "helmet": "^6.0.0",
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.4",
     "mongoose": "^6.6.1",
     "morgan": "^1.10.0",
     "react-router-dom": "^6.4.0",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "xss-clean": "^0.1.1"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "name": "the-final-project",
   "description": "#### Track Your Job Search",
@@ -22,6 +29,9 @@
   },
   "type": "module",
   "scripts": {
+    "build-client": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build-client",
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon server --ignore client",
     "client": "npm start --prefix client",

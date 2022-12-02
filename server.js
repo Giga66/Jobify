@@ -62,12 +62,7 @@ const port = process.env.PORT || 5000
 
 const start = async () => {
     try {
-        await connectDB(process.env.MONGO_URI, {useNewURLParser: true})
-        mongoose.connection.once('open', function(){
-            console.log('Conection has been made!');
-             }).on('error', function(error){
-          console.log('Error is: ', error)
-        })
+        await connectDB(process.env.MONGO_URI)
         app.listen(port, () => {
             console.log(`Server is listening on ${port}`)
         })

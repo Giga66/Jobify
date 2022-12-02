@@ -37,10 +37,10 @@
   },
   "type": "module",
   "scripts": {
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "install-client": "cd client && npm install",
     "build-client": "cd client && npm run build",
+    "build": "npm run install-client && npm run build-client && npm install",
     "server": "nodemon server --ignore client",
     "client": "npm start --prefix client",
     "start-local": "concurrently --kill-others-on-fail \" npm run server\" \" npm run client\"",
